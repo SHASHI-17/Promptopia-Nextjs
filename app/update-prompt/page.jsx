@@ -1,22 +1,30 @@
-// Import the necessary modules from Next.js
-'use client'
-import { useEffect, useState, Suspense } from 'react';
-import { useRouter } from 'next/router'; // Updated import for Next.js 14
-import Form from '@components/Form';
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter from next/router
+
+import Form from "@components/Form";
 
 const UpdatePrompt = () => {
   const router = useRouter();
-  const { id } = router.query; // Access query parameters using useRouter
+  const [promptId, setPromptId] = useState("");
 
-  const [post, setPost] = useState({ prompt: '', tag: '' });
+  useEffect(() => {
+    // Parse query parameters from the URL
+    const queryParams = new URLSearchParams(window.location.search);
+    const id = queryParams.get("id");
+    setPromptId(id);
+  }, []);
+
+  const [post, setPost] = useState({ prompt: "", tag: "" });
   const [submitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const getPromptDetails = async () => {
-      if (!id) return; // Check if id is available
+      if (!promptId) return; // Check if promptId is available
 
       try {
-        const response = await fetch(`/api/prompt/${id}`);
+        const response = await fetch(`/api/prompt/${promptId}`);
         const data = await response.json();
 
         setPost({
@@ -29,17 +37,17 @@ const UpdatePrompt = () => {
     };
 
     getPromptDetails(); // No need for the if statement here since useEffect handles it
-  }, [id]);
+  }, [promptId]);
 
   const updatePrompt = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    if (!id) return alert('Missing PromptId!');
+    if (!promptId) return alert("Missing PromptId!");
 
     try {
-      const response = await fetch(`/api/prompt/${id}`, {
-        method: 'PATCH',
+      const response = await fetch(`/api/prompt/${promptId}`, {
+        method: "PATCH",
         body: JSON.stringify({
           prompt: post.prompt,
           tag: post.tag,
@@ -47,7 +55,7 @@ const UpdatePrompt = () => {
       });
 
       if (response.ok) {
-        router.push('/');
+        router.push("/");
       }
     } catch (error) {
       console.log(error);
@@ -57,15 +65,13 @@ const UpdatePrompt = () => {
   };
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Form
-        type="Edit"
-        post={post}
-        setPost={setPost}
-        submitting={submitting}
-        handleSubmit={updatePrompt}
-      />
-    </Suspense>
+    <Form
+      type="Edit"
+      post={post}
+      setPost={setPost}
+      submitting={submitting}
+      handleSubmit={updatePrompt}
+    />
   );
 };
 
