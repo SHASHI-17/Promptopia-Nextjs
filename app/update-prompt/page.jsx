@@ -24,7 +24,7 @@ const UpdatePrompt = () => {
       });
     };
 
-    if (promptId) getPromptDetails();
+    getPromptDetails();
   }, [promptId]);
 
   const updatePrompt = async (e) => {
