@@ -1,4 +1,5 @@
 // Import the necessary modules from Next.js
+'use client'
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter } from 'next/router'; // Updated import for Next.js 14
 import Form from '@components/Form';
