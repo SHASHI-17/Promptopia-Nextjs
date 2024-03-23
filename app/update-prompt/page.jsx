@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter from next/router
+import { useRouter } from "next/navigation"; 
 
 import Form from "@components/Form";
 
@@ -10,7 +10,6 @@ const UpdatePrompt = () => {
   const [promptId, setPromptId] = useState("");
 
   useEffect(() => {
-    // Parse query parameters from the URL
     const queryParams = new URLSearchParams(window.location.search);
     const id = queryParams.get("id");
     setPromptId(id);
@@ -21,7 +20,7 @@ const UpdatePrompt = () => {
 
   useEffect(() => {
     const getPromptDetails = async () => {
-      if (!promptId) return; // Check if promptId is available
+      if (!promptId) return;
 
       try {
         const response = await fetch(`/api/prompt/${promptId}`);
@@ -36,7 +35,7 @@ const UpdatePrompt = () => {
       }
     };
 
-    getPromptDetails(); // No need for the if statement here since useEffect handles it
+    getPromptDetails(); 
   }, [promptId]);
 
   const updatePrompt = async (e) => {
